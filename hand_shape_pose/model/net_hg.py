@@ -132,5 +132,6 @@ class Net_HM_HG(nn.Module):
                 encoding.append(x)
             else:
                 encoding.append(ll)
+        
 
         return out, encoding

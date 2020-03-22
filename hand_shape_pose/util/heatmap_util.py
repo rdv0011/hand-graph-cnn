@@ -24,7 +24,7 @@ def find_keypoints_max(heatmaps):
   max_ind = max_ind.float()
 
   max_v = torch.floor(torch.div(max_ind, heatmaps.size(1)))
-  max_u = torch.fmod(max_ind, heatmaps.size(2))
+  max_u = torch.fmod(max_ind, float(heatmaps.size(2)))
   return torch.cat((max_u.view(-1,1), max_v.view(-1,1), max_val.view(-1,1)), 1)
 
 def compute_uv_from_heatmaps(hm, resize_dim):

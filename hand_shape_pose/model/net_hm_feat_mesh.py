@@ -102,10 +102,10 @@ class Graph_CNN_Feat_Mesh(nn.Module):
             return torch.cat((x, x_), 0)  # K x V x Fin*B
 
         if K > 1:
-            x1 = my_sparse_mm()(L, x0)  # V x Fin*B
+            x1 = my_sparse_mm.apply(L, x0)  # V x Fin*B
             x = torch.cat((x, x1.unsqueeze(0)), 0)  # 2 x V x Fin*B
         for k in range(2, K):
-            x2 = 2 * my_sparse_mm()(L, x1) - x0
+            x2 = 2 * my_sparse_mm.apply(L, x1) - x0
             x = torch.cat((x, x2.unsqueeze(0)), 0)  # M x Fin*B
             x0, x1 = x1, x2
 
@@ -217,6 +217,10 @@ class Net_HM_Feat_Mesh(nn.Module):
         self.mesh_net = Graph_CNN_Feat_Mesh(self.feat_net.num_feat_out, num_mesh_output_chan, graph_L)
 
     def forward(self, hm_list, encoding_list):
+        print(len(hm_list))
+        print(hm_list[0].size())
+        print(len(encoding_list))
+        print(encoding_list[0].size())
         feat = self.feat_net(hm_list, encoding_list)  # B x 4096
         mesh = self.mesh_net(feat)  # B x 1280 x 3
 
